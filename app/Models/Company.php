@@ -10,6 +10,7 @@ use Illuminate\Support\Collection;
 
 class Company extends Model
 {
+
     use SoftDeletes;
 
     /**
@@ -49,7 +50,6 @@ class Company extends Model
      */
     public function users()
     {
-        return $this
-            ->hasMany('App\Models\User', 'company_id');
+        return $this->hasMany('App\Models\User', 'company_id');
     }
 }

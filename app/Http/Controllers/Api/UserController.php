@@ -86,7 +86,19 @@ class UserController extends Controller
 
     public function getUser()
     {
-        return Auth::user();
+        $me = Auth::user();
+        $me->load('company');
+        return $me;
+    }
+
+    public function getAllUsers() {
+        $selectedCompany = getSelectedCompany();
+
+        if ($selectedCompany) {
+            return $selectedCompany->users;
+        }
+
+        return null;
     }
 
     public function logout() {

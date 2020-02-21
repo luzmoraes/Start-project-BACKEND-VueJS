@@ -26,6 +26,7 @@ Route::group([
 
     Route::name('user::')->prefix('user')->group(function () {
         Route::get('me', 'UserController@getUser');
+        Route::get('list', 'UserController@getAllUsers');
         Route::get('logout', 'UserController@logout');
     });
 
