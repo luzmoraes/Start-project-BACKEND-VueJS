@@ -99,4 +99,6 @@ return [
         ],
     ],
 
+    'url_form_reset_pass' => env('APP_URL_FORM_REST_PASS', 'http://localhost:8080/') . 'authentication/reset-password/'
+
 ];
