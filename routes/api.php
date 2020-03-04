@@ -32,12 +32,11 @@ Route::group([
     'namespace' => 'Api\\'
 ], function () {
 
-    // Route::get('auth/me', 'AuthController@me');
-
     Route::name('user::')->prefix('user')->group(function () {
         Route::get('me', 'UserController@getUser');
         Route::get('list', 'UserController@getAllUsers');
         Route::get('logout', 'UserController@logout');
+        Route::post('insert', 'UserController@store');
     });
 
 });
