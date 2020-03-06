@@ -85,6 +85,7 @@ class UserController extends Controller
         if ($selectedCompany) {
             
             $user = new User([
+                'company_id' => $selectedCompany->id,
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
