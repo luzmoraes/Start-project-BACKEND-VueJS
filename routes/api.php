@@ -35,8 +35,10 @@ Route::group([
     Route::name('user::')->prefix('user')->group(function () {
         Route::get('me', 'UserController@getUser');
         Route::get('list', 'UserController@getAllUsers');
+        Route::get('show/{id}', 'UserController@show');
         Route::get('logout', 'UserController@logout');
         Route::post('insert', 'UserController@store');
+        Route::put('update/{id}', 'UserController@update');
     });
 
 });

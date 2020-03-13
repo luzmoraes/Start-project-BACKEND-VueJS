@@ -43,6 +43,25 @@ class UserController extends Controller
         ], $messages);
     }
 
+
+    protected function validatorUpdate(array $data)
+    {
+        $messages = [
+            'name.required'       => 'name is required',
+            'name.string'         => 'name must be a string',
+            'name.max'            => 'name must be a maximum of 255 characters',
+            'email.required'      => 'email is required',
+            'email.string'        => 'email must be a string',
+            'email.email'         => 'email invalid',
+            'email.max'           => 'email must be a maximum of 255 characters',
+            'email.unique'        => 'email already exists'
+        ];
+        return Validator::make($data, [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users'
+        ], $messages);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -128,7 +147,13 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = User::find($id);
+
+        if ($user) {
+            return response()->json(['success' => true, 'user' => $user], 200);
+        } else {
+            return response()->json(['success' => false, 'error' => 'user_not_found']);
+        }
     }
 
     /**
@@ -151,7 +176,28 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validator = $this->validatorUpdate($request->all());
+
+        if ($validator->fails())
+        {
+            return response()->json(['success' => false, 'error' => $validator->errors()], 400);
+        }
+
+        try {
+
+            $user = User::find($id);
+
+            $user->fill($request->all());
+
+            if ($user->save())
+            {
+                return response()->json(['success' => true, 'user' => $user]);
+            } else {
+                return response()->json(['success' => false, 'error' => ['Erro inesperado'], 400]);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'error' => $e], 400);
+        }
     }
 
     /**
