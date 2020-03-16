@@ -47,6 +47,7 @@ class UserController extends Controller
 
     protected function validatorUpdate(array $data)
     {
+
         $messages = [
             'name.required'       => 'name is required',
             'name.string'         => 'name must be a string',
@@ -57,6 +58,7 @@ class UserController extends Controller
             'email.max'           => 'email must be a maximum of 255 characters',
             'email.unique'        => 'email already exists'
         ];
+
         return Validator::make($data, [
             'name' => 'required|string|max:255',
             'email' => [
@@ -64,7 +66,7 @@ class UserController extends Controller
                 'string',
                 'email',
                 'max:255',
-                Rule::unique('users')->ignore($this->user)
+                Rule::unique('users')->ignore($data['id'])
             ]
         ], $messages);
     }
@@ -187,7 +189,7 @@ class UserController extends Controller
 
         if ($validator->fails())
         {
-            return response()->json(['success' => false, 'error' => $validator->errors()], 400);
+            return response()->json(['success' => false, 'error' => $validator->errors()]);
         }
 
         try {
@@ -200,10 +202,10 @@ class UserController extends Controller
             {
                 return response()->json(['success' => true, 'user' => $user]);
             } else {
-                return response()->json(['success' => false, 'error' => ['Erro inesperado'], 400]);
+                return response()->json(['success' => false, 'error' => ['unexpected_error']]);
             }
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'error' => $e], 400);
+            return response()->json(['success' => false, 'error' => $e]);
         }
     }
 
@@ -215,7 +217,11 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if (User::destroy($id)) {
+            return response()->json(['success' => true], 200);
+        } else {
+            return response()->json(['success' => false, 'error' => 'unexpected_error']);
+        }
     }
 
     public function getUser()

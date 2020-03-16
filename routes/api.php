@@ -36,6 +36,7 @@ Route::group([
         Route::get('me', 'UserController@getUser');
         Route::get('list', 'UserController@getAllUsers');
         Route::get('show/{id}', 'UserController@show');
+        Route::get('delete/{id}', 'UserController@destroy');
         Route::get('logout', 'UserController@logout');
         Route::post('insert', 'UserController@store');
         Route::put('update/{id}', 'UserController@update');
